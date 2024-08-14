@@ -4,66 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Google Spreadsheet Data</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        table {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            border-collapse: collapse;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        tbody {
-            display: block;
-            max-height: 70vh;
-            overflow-y: auto;
-        }
-
-        thead, tbody tr {
-            display: table;
-            width: 100%;
-            table-layout: fixed;
-        }
-
-        /* テーブルのセルが小さくならないようにする */
-        td {
-            word-wrap: break-word;
-        }
-    </style>
 </head>
 <body>
     <h1>Google Spreadsheet Data</h1>
-    <table id="data-table">
+    <table id="data-table" border="1">
         <thead>
             <!-- ヘッダーが動的に挿入されます -->
         </thead>
@@ -80,7 +24,7 @@
         const spreadsheetId = '1CegaE1oDBFOLwsHtMkuvPc-s7JzWAXqlAejMMChRXyQ';
 
         // 取得したいシート名と範囲
-        const range = 'Sheet1!A1:C15';  // 範囲を A1:C15 に変更
+        const range = 'Sheet1!A1:C7';  // 必要に応じて範囲を調整してください
 
         // データを取得する関数
         async function fetchData() {
@@ -88,13 +32,7 @@
             const endpoint = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}&timestamp=${new Date().getTime()}`;
             try {
                 const response = await fetch(endpoint);
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
                 const data = await response.json();
-                if (!data.values || data.values.length === 0) {
-                    throw new Error('No data found in the spreadsheet');
-                }
                 displayData(data.values);
             } catch (error) {
                 console.error('Error fetching data:', error);
