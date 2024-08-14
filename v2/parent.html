@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Spreadsheet Data</title>
+</head>
+<body>
+    <h1>Google Spreadsheet Data</h1>
+    <table id="data-table" border="1">
+        <thead>
+            <tr>
+                <th>Column 1</th>
+                <th>Column 2</th>
+                <th>Column 3</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data will be inserted here -->
+        </tbody>
+    </table>
+
+    <script>
+        // Google Sheets APIのキー
+        const apiKey = 'YOUR_API_KEY';
+
+        // Google SpreadsheetのID（URLの一部に表示される長い文字列）
+        const spreadsheetId = 'YOUR_SPREADSHEET_ID';
+
+        // 取得したいシート名
+        const sheetName = 'Sheet1';
+
+        // Google Sheets APIのエンドポイントURLを作成
+        const endpoint = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${sheetName}?key=${apiKey}`;
+
+        // データを取得する関数
+        async function fetchData() {
+            try {
+                const response = await fetch(endpoint);
+                const data = await response.json();
+                displayData(data.values);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        // データをHTMLテーブルに表示する関数
+        function displayData(data) {
+            const tableBody = document.getElementById('data-table').getElementsByTagName('tbody')[0];
+            data.forEach(row => {
+                const newRow = tableBody.insertRow();
+                row.forEach(cell => {
+                    const newCell = newRow.insertCell();
+                    newCell.textContent = cell;
+                });
+            });
+        }
+
+        // ページロード時にデータを取得して表示
+        window.onload = fetchData;
+    </script>
+</body>
+</html>
