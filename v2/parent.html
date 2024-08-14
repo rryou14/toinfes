@@ -9,14 +9,10 @@
     <h1>Google Spreadsheet Data</h1>
     <table id="data-table" border="1">
         <thead>
-            <tr>
-                <th>Column 1</th>
-                <th>Column 2</th>
-                <th>Column 3</th>
-            </tr>
+            <!-- ヘッダーが動的に挿入されます -->
         </thead>
         <tbody>
-            <!-- Data will be inserted here -->
+            <!-- データが動的に挿入されます -->
         </tbody>
     </table>
 
@@ -24,14 +20,14 @@
         // Google Sheets APIのキー
         const apiKey = 'AIzaSyD1h5RbTdFuozu2I2avhggzU4gX37ClVFg';
 
-        // Google SpreadsheetのID（URLの一部に表示される長い文字列）
+        // Google SpreadsheetのID
         const spreadsheetId = '1CegaE1oDBFOLwsHtMkuvPc-s7JzWAXqlAejMMChRXyQ';
 
-        // 取得したいシート名
-        const sheetName = 'Sheet1';
+        // 取得したいシート名と範囲
+        const range = 'Sheet1!A1:C6';  // 必要に応じて範囲を調整してください
 
         // Google Sheets APIのエンドポイントURLを作成
-        const endpoint = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${sheetName}?key=${apiKey}`;
+        const endpoint = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
 
         // データを取得する関数
         async function fetchData() {
@@ -47,7 +43,21 @@
         // データをHTMLテーブルに表示する関数
         function displayData(data) {
             const tableBody = document.getElementById('data-table').getElementsByTagName('tbody')[0];
-            data.forEach(row => {
+            const tableHead = document.getElementById('data-table').getElementsByTagName('thead')[0];
+
+            // 既存のヘッダーをクリア
+            tableHead.innerHTML = '';
+
+            // ヘッダー行を作成
+            const headerRow = tableHead.insertRow();
+            data[0].forEach(header => {
+                const newHeaderCell = document.createElement('th');
+                newHeaderCell.textContent = header;
+                headerRow.appendChild(newHeaderCell);
+            });
+
+            // データ行を作成
+            data.slice(1).forEach(row => {
                 const newRow = tableBody.insertRow();
                 row.forEach(cell => {
                     const newCell = newRow.insertCell();
