@@ -26,11 +26,10 @@
         // 取得したいシート名と範囲
         const range = 'Sheet1!A1:C7';  // 必要に応じて範囲を調整してください
 
-        // Google Sheets APIのエンドポイントURLを作成
-        const endpoint = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
-
         // データを取得する関数
         async function fetchData() {
+            // タイムスタンプを付加してキャッシュを回避
+            const endpoint = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}&timestamp=${new Date().getTime()}`;
             try {
                 const response = await fetch(endpoint);
                 const data = await response.json();
