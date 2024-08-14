@@ -24,7 +24,7 @@
         const spreadsheetId = '1CegaE1oDBFOLwsHtMkuvPc-s7JzWAXqlAejMMChRXyQ';
 
         // 取得したいシート名と範囲
-        const range = 'Sheet1!A1:C6';  // 必要に応じて範囲を調整してください
+        const range = 'Sheet1!A1:C7';  // 必要に応じて範囲を調整してください
 
         // Google Sheets APIのエンドポイントURLを作成
         const endpoint = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
@@ -47,6 +47,7 @@
 
             // 既存のヘッダーをクリア
             tableHead.innerHTML = '';
+            tableBody.innerHTML = ''; // 既存のテーブルデータをクリア
 
             // ヘッダー行を作成
             const headerRow = tableHead.insertRow();
@@ -68,6 +69,9 @@
 
         // ページロード時にデータを取得して表示
         window.onload = fetchData;
+
+        // 5秒ごとにデータを自動更新
+        setInterval(fetchData, 5000);
     </script>
 </body>
 </html>
