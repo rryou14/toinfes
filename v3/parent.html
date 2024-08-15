@@ -1,6 +1,5 @@
 <!-- apiKey = 'AIzaSyDtAvd_MNFzjS8JBTK9Uf-yOknYAdKiS-E';
 spreadsheetId = '1CegaE1oDBFOLwsHtMkuvPc-s7JzWAXqlAejMMChRXyQ'; -->
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -21,20 +20,23 @@ spreadsheetId = '1CegaE1oDBFOLwsHtMkuvPc-s7JzWAXqlAejMMChRXyQ'; -->
 
     <script>
         // Google Sheets APIのキー
-        const apiKey = 'AIzaSyDtAvd_MNFzjS8JBTK9Uf-yOknYAdKiS-E';
+        const apiKey = 'AIzaSyDtAvd_MNFzjS8JBTK9Uf-yOknYAdKiS-E';  // 正しいAPIキーを入力
 
         // Google SpreadsheetのID
-        const spreadsheetId = '1CegaE1oDBFOLwsHtMkuvPc-s7JzWAXqlAejMMChRXyQ';
+        const spreadsheetId = '1CegaE1oDBFOLwsHtMkuvPc-s7JzWAXqlAejMMChRXyQ';  // 正しいスプレッドシートIDを入力
 
         // 取得したいシート名と範囲
-        const range = 'Sheet1!A1:C7';  // 必要に応じて範囲を調整してください
+        const range = 'Sheet1!A1:C15';  // 必要に応じて範囲を調整してください
 
         // データを取得する関数
         async function fetchData() {
             // タイムスタンプを付加してキャッシュを回避
-            const endpoint = https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}&timestamp=${new Date().getTime()};
+            const endpoint = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}&timestamp=${new Date().getTime()}`;
             try {
                 const response = await fetch(endpoint);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
                 const data = await response.json();
                 displayData(data.values);
             } catch (error) {
@@ -44,6 +46,11 @@ spreadsheetId = '1CegaE1oDBFOLwsHtMkuvPc-s7JzWAXqlAejMMChRXyQ'; -->
 
         // データをHTMLテーブルに表示する関数
         function displayData(data) {
+            if (!data || data.length === 0) {
+                console.error('No data found.');
+                return;
+            }
+
             const tableBody = document.getElementById('data-table').getElementsByTagName('tbody')[0];
             const tableHead = document.getElementById('data-table').getElementsByTagName('thead')[0];
 
